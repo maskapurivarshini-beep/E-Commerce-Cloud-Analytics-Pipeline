@@ -13,6 +13,12 @@ Add your Power BI dashboard screenshots here:
 
 - `adf_pipeline_success.png` — ADF pipeline with all 4 activities showing "Succeeded"
 <img width="1372" height="892" alt="all_three_succeded" src="https://github.com/user-attachments/assets/cb7f312a-27a0-44e8-aa55-81900dbe991e" />
+<img width="1372" height="892" alt="adf_4activities" src="https://github.com/user-attachments/assets/9b6e251a-2e49-4ddb-8bf7-c8b5fe660179" />
+copy_orders_staging — succeeded later
+copy_order_items — succeeded later
+copy_customers — Failed (expected — table already has data)
+copy_products — Failed (expected — table already has data)
+
 
 - `resource_group.png` — Azure resource group showing all 4 resources
 <img width="1372" height="892" alt="ecommerce_rg" src="https://github.com/user-attachments/assets/1fc83a04-c3e4-4842-90f8-7eb0e3d9aa60" />
