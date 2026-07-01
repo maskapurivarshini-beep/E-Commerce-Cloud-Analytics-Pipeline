@@ -38,16 +38,16 @@ Power BI Web (app.powerbi.com)
 ## Design Decisions
 
 ### Why ADLS Gen2 instead of Blob Storage?
-ADLS Gen2 adds hierarchical namespace on top of Blob Storage, enabling folder-level permissions, better analytics performance, and data lake zoning patterns (raw/processed/curated).
+ADLS Gen2 adds hierarchical namespace on top of Blob Storage, enabling folder level permissions, better analytics performance, and data lake zoning patterns (raw/processed/curated).
 
 ### Why Star Schema?
 Star Schema optimizes for aggregation queries common in BI reporting. The fact table stays lean (transaction data only) while dimension tables handle descriptive filtering. This structure makes DAX measures in Power BI more efficient.
 
 ### Why a Staging Table?
-The order_items source file (fact table source) didn't contain customer_id or order_date — these lived in the orders file. Rather than redesigning the pipeline, a staging table was loaded and a SQL UPDATE JOIN enriched the fact table. This is a common real-world ETL pattern.
+The order_items source file (fact table source) didn't contain customer_id or order_date these lived in the orders file. Rather than redesigning the pipeline, a staging table was loaded and a SQL UPDATE JOIN enriched the fact table. This is a common real world ETL pattern.
 
 ### Why a SQL View?
-Power BI Web's relationship engine didn't filter correctly between fact_orders and dim_customers despite proper Many-to-One configuration. Creating a pre-joined SQL view (vw_sales_dashboard) bypassed the issue entirely. This is a pragmatic, production-common pattern.
+Power BI Web's relationship engine didn't filter correctly between fact_orders and dim_customers despite proper Many-to-One configuration. Creating a pre-joined SQL view (vw_sales_dashboard) bypassed the issue entirely. This is a pragmatic, production common pattern.
 
 ### Why Filled Map instead of Donut Chart?
 27 Brazilian states in a donut chart created 27 unreadable slices of nearly equal size. A filled map communicates geographic concentration instantly — São Paulo's revenue dominance is visible without reading a single label.
