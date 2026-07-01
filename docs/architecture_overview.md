@@ -50,7 +50,7 @@ The order_items source file (fact table source) didn't contain customer_id or or
 Power BI Web's relationship engine didn't filter correctly between fact_orders and dim_customers despite proper Many-to-One configuration. Creating a pre-joined SQL view (vw_sales_dashboard) bypassed the issue entirely. This is a pragmatic, production common pattern.
 
 ### Why Filled Map instead of Donut Chart?
-27 Brazilian states in a donut chart created 27 unreadable slices of nearly equal size. A filled map communicates geographic concentration instantly — São Paulo's revenue dominance is visible without reading a single label.
+27 Brazilian states in a donut chart created 27 unreadable slices of nearly equal size. A filled map communicates geographic concentration instantly São Paulo's revenue dominance is visible without reading a single label.
 
 ## Cost Summary
 
