@@ -1,0 +1,126 @@
+{
+  "pipeline": {
+    "name": "pipeline_load_ecommerce",
+    "description": "Loads e-commerce CSV data from ADLS Gen2 into Azure SQL Database Star Schema",
+    "activities": [
+      {
+        "name": "copy_customers",
+        "type": "Copy",
+        "source": {
+          "dataset": "ds_csv_customers",
+          "type": "DelimitedText",
+          "linkedService": "ls_adls_raw",
+          "filePath": "raw/olist_customers_dataset.csv",
+          "firstRowAsHeader": true
+        },
+        "sink": {
+          "dataset": "ds_sql_dim_customers",
+          "type": "AzureSqlTable",
+          "linkedService": "ls_azure_sql",
+          "tableName": "dbo.dim_customers"
+        },
+        "columnMappings": [
+          { "source": "customer_id", "destination": "customer_id" },
+          { "source": "customer_city", "destination": "customer_city" },
+          { "source": "customer_state", "destination": "customer_state" }
+        ]
+      },
+      {
+        "name": "copy_products",
+        "type": "Copy",
+        "source": {
+          "dataset": "ds_csv_products",
+          "type": "DelimitedText",
+          "linkedService": "ls_adls_raw",
+          "filePath": "raw/olist_products_dataset.csv",
+          "firstRowAsHeader": true
+        },
+        "sink": {
+          "dataset": "ds_sql_dim_products",
+          "type": "AzureSqlTable",
+          "linkedService": "ls_azure_sql",
+          "tableName": "dbo.dim_products"
+        },
+        "columnMappings": [
+          { "source": "product_id", "destination": "product_id" },
+          { "source": "product_category_name", "destination": "product_category" }
+        ]
+      },
+      {
+        "name": "copy_order_items",
+        "type": "Copy",
+        "source": {
+          "dataset": "ds_csv_order_items",
+          "type": "DelimitedText",
+          "linkedService": "ls_adls_raw",
+          "filePath": "raw/olist_order_items_dataset.csv",
+          "firstRowAsHeader": true
+        },
+        "sink": {
+          "dataset": "ds_sql_fact_orders",
+          "type": "AzureSqlTable",
+          "linkedService": "ls_azure_sql",
+          "tableName": "dbo.fact_orders"
+        },
+        "columnMappings": [
+          { "source": "order_id", "destination": "order_id" },
+          { "source": "product_id", "destination": "product_id" },
+          { "source": "price", "destination": "price" },
+          { "source": "freight_value", "destination": "freight_value" }
+        ]
+      },
+      {
+        "name": "copy_orders_staging",
+        "type": "Copy",
+        "source": {
+          "dataset": "ds_csv_orders",
+          "type": "DelimitedText",
+          "linkedService": "ls_adls_raw",
+          "filePath": "raw/olist_orders_dataset.csv",
+          "firstRowAsHeader": true
+        },
+        "sink": {
+          "dataset": "ds_sql_stg_orders",
+          "type": "AzureSqlTable",
+          "linkedService": "ls_azure_sql",
+          "tableName": "dbo.stg_orders"
+        },
+        "columnMappings": [
+          { "source": "order_id", "destination": "order_id" },
+          { "source": "customer_id", "destination": "customer_id" },
+          { "source": "order_status", "destination": "order_status" },
+          { "source": "order_purchase_timestamp", "destination": "order_purchase_timestamp" },
+          { "source": "order_approved_at", "destination": "order_approved_at" },
+          { "source": "order_delivered_carrier_date", "destination": "order_delivered_carrier_date" },
+          { "source": "order_delivered_customer_date", "destination": "order_delivered_customer_date" },
+          { "source": "order_estimated_delivery_date", "destination": "order_estimated_delivery_date" }
+        ]
+      }
+    ],
+    "linkedServices": [
+      {
+        "name": "ls_adls_raw",
+        "type": "AzureDataLakeStorageGen2",
+        "authentication": "AccountKey",
+        "storageAccount": "varshinidatalake01"
+      },
+      {
+        "name": "ls_azure_sql",
+        "type": "AzureSqlDatabase",
+        "authentication": "SQL",
+        "server": "varshini-sql-server01.database.windows.net",
+        "database": "ecommerce-analytics-db"
+      }
+    ],
+    "datasets": [
+      { "name": "ds_csv_customers", "type": "DelimitedText", "linkedService": "ls_adls_raw" },
+      { "name": "ds_csv_products", "type": "DelimitedText", "linkedService": "ls_adls_raw" },
+      { "name": "ds_csv_order_items", "type": "DelimitedText", "linkedService": "ls_adls_raw" },
+      { "name": "ds_csv_orders", "type": "DelimitedText", "linkedService": "ls_adls_raw" },
+      { "name": "ds_sql_dim_customers", "type": "AzureSqlTable", "linkedService": "ls_azure_sql" },
+      { "name": "ds_sql_dim_products", "type": "AzureSqlTable", "linkedService": "ls_azure_sql" },
+      { "name": "ds_sql_fact_orders", "type": "AzureSqlTable", "linkedService": "ls_azure_sql" },
+      { "name": "ds_sql_stg_orders", "type": "AzureSqlTable", "linkedService": "ls_azure_sql" }
+    ]
+  }
+}
